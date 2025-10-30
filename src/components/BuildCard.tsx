@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Heart, MessageCircle, Bookmark, Share2, DollarSign, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "@/hooks/use-toast";
 
 interface BuildStage {
   id: string;
@@ -127,7 +128,13 @@ export const BuildCard = ({
       {/* Right Side Actions */}
       <div className="absolute right-4 bottom-32 flex flex-col gap-6 z-10">
         <button
-          onClick={() => setIsLiked(!isLiked)}
+          onClick={() => {
+            setIsLiked(!isLiked);
+            toast({
+              title: !isLiked ? "Build liked! ❤️" : "Unliked",
+              description: !isLiked ? "Added to your liked builds" : "Removed from liked builds",
+            });
+          }}
           className="flex flex-col items-center gap-1 transition-transform hover:scale-110"
         >
           <div
@@ -140,7 +147,15 @@ export const BuildCard = ({
           <span className="text-xs font-medium text-foreground">{likes + (isLiked && !initialLiked ? 1 : 0)}</span>
         </button>
 
-        <button className="flex flex-col items-center gap-1 transition-transform hover:scale-110">
+        <button 
+          onClick={() => {
+            toast({
+              title: "Comments",
+              description: "Comment feature coming soon!",
+            });
+          }}
+          className="flex flex-col items-center gap-1 transition-transform hover:scale-110"
+        >
           <div className="w-12 h-12 rounded-full bg-card/80 backdrop-blur-lg flex items-center justify-center">
             <MessageCircle className="w-6 h-6 text-foreground" />
           </div>
@@ -148,7 +163,13 @@ export const BuildCard = ({
         </button>
 
         <button
-          onClick={() => setIsSaved(!isSaved)}
+          onClick={() => {
+            setIsSaved(!isSaved);
+            toast({
+              title: !isSaved ? "Build saved! 🔖" : "Unsaved",
+              description: !isSaved ? "Added to your saved builds" : "Removed from saved builds",
+            });
+          }}
           className="flex flex-col items-center gap-1 transition-transform hover:scale-110"
         >
           <div
@@ -160,14 +181,30 @@ export const BuildCard = ({
           </div>
         </button>
 
-        <button className="flex flex-col items-center gap-1 transition-transform hover:scale-110">
+        <button 
+          onClick={() => {
+            toast({
+              title: "Request Quote 💰",
+              description: "Quote request feature coming soon!",
+            });
+          }}
+          className="flex flex-col items-center gap-1 transition-transform hover:scale-110"
+        >
           <div className="w-12 h-12 rounded-full bg-gradient-performance flex items-center justify-center shadow-glow-primary">
             <DollarSign className="w-6 h-6 text-white" />
           </div>
           <span className="text-[10px] font-medium text-foreground">Quote</span>
         </button>
 
-        <button className="flex flex-col items-center gap-1 transition-transform hover:scale-110">
+        <button 
+          onClick={() => {
+            toast({
+              title: "Share Build 🔗",
+              description: "Share feature coming soon!",
+            });
+          }}
+          className="flex flex-col items-center gap-1 transition-transform hover:scale-110"
+        >
           <div className="w-12 h-12 rounded-full bg-card/80 backdrop-blur-lg flex items-center justify-center">
             <Share2 className="w-6 h-6 text-foreground" />
           </div>

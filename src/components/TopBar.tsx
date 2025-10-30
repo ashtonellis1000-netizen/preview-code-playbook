@@ -1,5 +1,6 @@
 import { Search, Bell } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "@/hooks/use-toast";
 
 export const TopBar = () => {
   return (
@@ -14,23 +15,41 @@ export const TopBar = () => {
 
         {/* Feed Selector */}
         <div className="flex gap-2">
-          <Badge variant="default" className="cursor-pointer bg-primary hover:bg-primary/90">
+          <Badge 
+            variant="default" 
+            className="cursor-pointer bg-primary hover:bg-primary/90"
+            onClick={() => toast({ title: "For You Feed", description: "Already viewing For You feed" })}
+          >
             For You
           </Badge>
-          <Badge variant="secondary" className="cursor-pointer hover:bg-secondary/80">
+          <Badge 
+            variant="secondary" 
+            className="cursor-pointer hover:bg-secondary/80"
+            onClick={() => toast({ title: "Verified Feed", description: "Verified shops only - coming soon!" })}
+          >
             Verified
           </Badge>
-          <Badge variant="secondary" className="cursor-pointer hover:bg-secondary/80">
+          <Badge 
+            variant="secondary" 
+            className="cursor-pointer hover:bg-secondary/80"
+            onClick={() => toast({ title: "Following Feed", description: "Your followed shops - coming soon!" })}
+          >
             Following
           </Badge>
         </div>
 
         {/* Actions */}
         <div className="flex items-center gap-4">
-          <button className="text-muted-foreground hover:text-foreground transition-colors">
+          <button 
+            onClick={() => toast({ title: "Search", description: "Search feature coming soon!" })}
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
             <Search className="w-5 h-5" />
           </button>
-          <button className="text-muted-foreground hover:text-foreground transition-colors relative">
+          <button 
+            onClick={() => toast({ title: "Notifications", description: "You have 3 new notifications!" })}
+            className="text-muted-foreground hover:text-foreground transition-colors relative"
+          >
             <Bell className="w-5 h-5" />
             <div className="absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full" />
           </button>
