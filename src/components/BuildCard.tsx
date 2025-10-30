@@ -1,8 +1,9 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Heart, MessageCircle, Bookmark, Share2, DollarSign, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/lib/supabaseClient";
 
 interface BuildStage {
   id: string;
@@ -31,6 +32,7 @@ interface BuildCardProps {
 }
 
 export const BuildCard = ({
+  id,
   shopName,
   shopVerified,
   carModel,
@@ -42,9 +44,36 @@ export const BuildCard = ({
   isLiked: initialLiked,
   isSaved: initialSaved,
 }: BuildCardProps) => {
+  const navigate = useNavigate();
   const [currentStage, setCurrentStage] = useState(0);
   const [isLiked, setIsLiked] = useState(initialLiked);
   const [isSaved, setIsSaved] = useState(initialSaved);
+
+  const handleLike = async () => {
+    setIsLiked(!isLiked);
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      await supabase.from("likes").upsert({
+        user_id: user.id,
+        build_id: id,
+        liked: !isLiked,
+      });
+    }
+  };
+
+  const handleSave = async () => {
+    setIsSaved(!isSaved);
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      await supabase.from("saves").upsert({
+        user_id: user.id,
+        build_id: id,
+        saved: !isSaved,
+      });
+    }
+  };
+
+  const handleStageClick = () => navigate(`/build/${id}`);
 
   return (
     <div className="h-screen w-full snap-start snap-always relative bg-gradient-carbon overflow-hidden">
@@ -72,6 +101,13 @@ export const BuildCard = ({
           />
         ))}
       </div>
+
+      {/* Build Image Click Area */}
+      <button
+        onClick={handleStageClick}
+        className="absolute inset-0 z-0"
+        aria-label="View build details"
+      />
 
       {/* Content Overlay */}
       <div className="absolute bottom-0 left-0 right-0 p-6 pb-24 space-y-4 z-10">
@@ -128,13 +164,7 @@ export const BuildCard = ({
       {/* Right Side Actions */}
       <div className="absolute right-4 bottom-32 flex flex-col gap-6 z-10">
         <button
-          onClick={() => {
-            setIsLiked(!isLiked);
-            toast({
-              title: !isLiked ? "Build liked! ❤️" : "Unliked",
-              description: !isLiked ? "Added to your liked builds" : "Removed from liked builds",
-            });
-          }}
+          onClick={handleLike}
           className="flex flex-col items-center gap-1 transition-transform hover:scale-110"
         >
           <div
@@ -148,12 +178,7 @@ export const BuildCard = ({
         </button>
 
         <button 
-          onClick={() => {
-            toast({
-              title: "Comments",
-              description: "Comment feature coming soon!",
-            });
-          }}
+          onClick={() => navigate(`/build/${id}/comments`)}
           className="flex flex-col items-center gap-1 transition-transform hover:scale-110"
         >
           <div className="w-12 h-12 rounded-full bg-card/80 backdrop-blur-lg flex items-center justify-center">
@@ -163,13 +188,7 @@ export const BuildCard = ({
         </button>
 
         <button
-          onClick={() => {
-            setIsSaved(!isSaved);
-            toast({
-              title: !isSaved ? "Build saved! 🔖" : "Unsaved",
-              description: !isSaved ? "Added to your saved builds" : "Removed from saved builds",
-            });
-          }}
+          onClick={handleSave}
           className="flex flex-col items-center gap-1 transition-transform hover:scale-110"
         >
           <div
@@ -182,12 +201,7 @@ export const BuildCard = ({
         </button>
 
         <button 
-          onClick={() => {
-            toast({
-              title: "Request Quote 💰",
-              description: "Quote request feature coming soon!",
-            });
-          }}
+          onClick={() => navigate(`/quote/${id}`)}
           className="flex flex-col items-center gap-1 transition-transform hover:scale-110"
         >
           <div className="w-12 h-12 rounded-full bg-gradient-performance flex items-center justify-center shadow-glow-primary">
@@ -198,10 +212,13 @@ export const BuildCard = ({
 
         <button 
           onClick={() => {
-            toast({
-              title: "Share Build 🔗",
-              description: "Share feature coming soon!",
-            });
+            if (navigator.share) {
+              navigator.share({
+                title: buildTitle,
+                text: `Check out this ${carModel} build by ${shopName}`,
+                url: window.location.origin + `/build/${id}`,
+              });
+            }
           }}
           className="flex flex-col items-center gap-1 transition-transform hover:scale-110"
         >
