@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { Heart, MessageCircle, Bookmark, Share2, DollarSign, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { supabase } from "@/lib/supabaseClient";
 
 interface BuildStage {
   id: string;
@@ -49,28 +48,12 @@ export const BuildCard = ({
   const [isLiked, setIsLiked] = useState(initialLiked);
   const [isSaved, setIsSaved] = useState(initialSaved);
 
-  const handleLike = async () => {
+  const handleLike = () => {
     setIsLiked(!isLiked);
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) {
-      await supabase.from("likes").upsert({
-        user_id: user.id,
-        build_id: id,
-        liked: !isLiked,
-      });
-    }
   };
 
-  const handleSave = async () => {
+  const handleSave = () => {
     setIsSaved(!isSaved);
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) {
-      await supabase.from("saves").upsert({
-        user_id: user.id,
-        build_id: id,
-        saved: !isSaved,
-      });
-    }
   };
 
   const handleStageClick = () => navigate(`/build/${id}`);
