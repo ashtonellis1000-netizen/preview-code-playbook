@@ -2,14 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, Bell } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { SearchModal } from "./SearchModal";
 
 export const TopBar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const navigate = useNavigate();
 
-  const handleSearchClick = () => setIsSearchOpen(true);
-  const handleNotificationsClick = () => navigate("/notifications");
   const handleFilterClick = (filter: string) => {
     localStorage.setItem("feed_filter", filter);
     window.location.reload();
@@ -54,13 +51,13 @@ export const TopBar = () => {
           {/* Actions */}
           <div className="flex items-center gap-4">
             <button 
-              onClick={handleSearchClick}
+              onClick={() => setIsSearchOpen(true)}
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
               <Search className="w-5 h-5" />
             </button>
             <button 
-              onClick={handleNotificationsClick}
+              onClick={() => navigate("/notifications")}
               className="text-muted-foreground hover:text-foreground transition-colors relative"
             >
               <Bell className="w-5 h-5" />
@@ -70,7 +67,27 @@ export const TopBar = () => {
         </div>
       </header>
 
-      {isSearchOpen && <SearchModal onClose={() => setIsSearchOpen(false)} />}
+      {isSearchOpen && (
+        <div className="fixed inset-0 bg-background/95 backdrop-blur-lg z-50 flex flex-col">
+          <div className="flex items-center justify-between p-4 border-b border-border">
+            <input
+              type="text"
+              placeholder="Search builds, shops, users..."
+              className="flex-1 bg-transparent text-foreground placeholder:text-muted-foreground outline-none text-lg"
+              autoFocus
+            />
+            <button 
+              onClick={() => setIsSearchOpen(false)} 
+              className="ml-4 text-muted-foreground hover:text-foreground px-4 py-2 border border-border rounded-md"
+            >
+              Close
+            </button>
+          </div>
+          <div className="flex-1 p-6">
+            <p className="text-muted-foreground text-center mt-8">Start typing to search...</p>
+          </div>
+        </div>
+      )}
     </>
   );
 };

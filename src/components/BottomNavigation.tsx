@@ -6,7 +6,7 @@ export const BottomNavigation = () => {
   const location = useLocation();
 
   const navItems = [
-    { label: "Feed", path: "/", icon: Home },
+    { label: "Feed", path: "/feed", icon: Home },
     { label: "Events", path: "/events", icon: Calendar },
     { label: "Clubs", path: "/clubs", icon: Users },
     { label: "Profile", path: "/profile", icon: User },

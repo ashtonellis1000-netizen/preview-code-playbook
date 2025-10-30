@@ -14,7 +14,283 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      builds: {
+        Row: {
+          author_id: string | null
+          cover_url: string | null
+          created_at: string
+          id: string
+          shop_id: string | null
+          specs: Json | null
+          title: string
+        }
+        Insert: {
+          author_id?: string | null
+          cover_url?: string | null
+          created_at?: string
+          id?: string
+          shop_id?: string | null
+          specs?: Json | null
+          title: string
+        }
+        Update: {
+          author_id?: string | null
+          cover_url?: string | null
+          created_at?: string
+          id?: string
+          shop_id?: string | null
+          specs?: Json | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "builds_shop_id_fkey"
+            columns: ["shop_id"]
+            isOneToOne: false
+            referencedRelation: "shops"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      clubs: {
+        Row: {
+          city: string | null
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          city?: string | null
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          city?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      comments: {
+        Row: {
+          author_id: string
+          body: string
+          build_id: string
+          created_at: string
+          id: string
+        }
+        Insert: {
+          author_id: string
+          body: string
+          build_id: string
+          created_at?: string
+          id?: string
+        }
+        Update: {
+          author_id?: string
+          body?: string
+          build_id?: string
+          created_at?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_build_id_fkey"
+            columns: ["build_id"]
+            isOneToOne: false
+            referencedRelation: "builds"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          created_at: string
+          id: string
+          location: string | null
+          starts_at: string | null
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          location?: string | null
+          starts_at?: string | null
+          title: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          location?: string | null
+          starts_at?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
+      likes: {
+        Row: {
+          build_id: string
+          created_at: string
+          user_id: string
+        }
+        Insert: {
+          build_id: string
+          created_at?: string
+          user_id: string
+        }
+        Update: {
+          build_id?: string
+          created_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "likes_build_id_fkey"
+            columns: ["build_id"]
+            isOneToOne: false
+            referencedRelation: "builds"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+          username?: string | null
+        }
+        Relationships: []
+      }
+      quotes: {
+        Row: {
+          build_id: string
+          created_at: string
+          details: string | null
+          id: string
+          requester_id: string
+          status: string
+        }
+        Insert: {
+          build_id: string
+          created_at?: string
+          details?: string | null
+          id?: string
+          requester_id: string
+          status?: string
+        }
+        Update: {
+          build_id?: string
+          created_at?: string
+          details?: string | null
+          id?: string
+          requester_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quotes_build_id_fkey"
+            columns: ["build_id"]
+            isOneToOne: false
+            referencedRelation: "builds"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      saves: {
+        Row: {
+          build_id: string
+          created_at: string
+          user_id: string
+        }
+        Insert: {
+          build_id: string
+          created_at?: string
+          user_id: string
+        }
+        Update: {
+          build_id?: string
+          created_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saves_build_id_fkey"
+            columns: ["build_id"]
+            isOneToOne: false
+            referencedRelation: "builds"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shops: {
+        Row: {
+          city: string | null
+          created_at: string
+          id: string
+          name: string
+          owner_id: string
+          state: string | null
+          verified: boolean
+        }
+        Insert: {
+          city?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          owner_id: string
+          state?: string | null
+          verified?: boolean
+        }
+        Update: {
+          city?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          owner_id?: string
+          state?: string | null
+          verified?: boolean
+        }
+        Relationships: []
+      }
+      users: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +299,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user" | "seller" | "verified_shop"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +426,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user", "seller", "verified_shop"],
+    },
   },
 } as const
