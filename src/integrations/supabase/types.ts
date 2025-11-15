@@ -20,27 +20,36 @@ export type Database = {
           cover_url: string | null
           created_at: string
           id: string
+          published_at: string | null
           shop_id: string | null
           specs: Json | null
+          status: string | null
           title: string
+          vehicle_trim_id: string | null
         }
         Insert: {
           author_id?: string | null
           cover_url?: string | null
           created_at?: string
           id?: string
+          published_at?: string | null
           shop_id?: string | null
           specs?: Json | null
+          status?: string | null
           title: string
+          vehicle_trim_id?: string | null
         }
         Update: {
           author_id?: string | null
           cover_url?: string | null
           created_at?: string
           id?: string
+          published_at?: string | null
           shop_id?: string | null
           specs?: Json | null
+          status?: string | null
           title?: string
+          vehicle_trim_id?: string | null
         }
         Relationships: [
           {
@@ -48,6 +57,13 @@ export type Database = {
             columns: ["shop_id"]
             isOneToOne: false
             referencedRelation: "shops"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "builds_vehicle_trim_id_fkey"
+            columns: ["vehicle_trim_id"]
+            isOneToOne: false
+            referencedRelation: "vehicle_trims"
             referencedColumns: ["id"]
           },
         ]
@@ -71,7 +87,15 @@ export type Database = {
           id?: string
           name?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "shops_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       comments: {
         Row: {
@@ -104,6 +128,697 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      build_updates: {
+        Row: {
+          author_id: string
+          body: string | null
+          build_id: string
+          created_at: string
+          id: string
+          media_asset_id: string | null
+          progress_percent: number | null
+          title: string | null
+        }
+        Insert: {
+          author_id: string
+          body?: string | null
+          build_id: string
+          created_at?: string
+          id?: string
+          media_asset_id?: string | null
+          progress_percent?: number | null
+          title?: string | null
+        }
+        Update: {
+          author_id?: string
+          body?: string | null
+          build_id?: string
+          created_at?: string
+          id?: string
+          media_asset_id?: string | null
+          progress_percent?: number | null
+          title?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "build_updates_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "build_updates_build_id_fkey"
+            columns: ["build_id"]
+            isOneToOne: false
+            referencedRelation: "builds"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "build_updates_media_asset_id_fkey"
+            columns: ["media_asset_id"]
+            isOneToOne: false
+            referencedRelation: "media_assets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      build_vehicle_specs: {
+        Row: {
+          acquisition_source: string | null
+          asking_price: number | null
+          build_id: string
+          condition_notes: string | null
+          exterior_color: string | null
+          interior_color: string | null
+          mileage: number | null
+          vin: string | null
+        }
+        Insert: {
+          acquisition_source?: string | null
+          asking_price?: number | null
+          build_id: string
+          condition_notes?: string | null
+          exterior_color?: string | null
+          interior_color?: string | null
+          mileage?: number | null
+          vin?: string | null
+        }
+        Update: {
+          acquisition_source?: string | null
+          asking_price?: number | null
+          build_id?: string
+          condition_notes?: string | null
+          exterior_color?: string | null
+          interior_color?: string | null
+          mileage?: number | null
+          vin?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "build_vehicle_specs_build_id_fkey"
+            columns: ["build_id"]
+            isOneToOne: true
+            referencedRelation: "builds"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mod_lists: {
+        Row: {
+          build_id: string
+          created_at: string
+          id: string
+          title: string
+        }
+        Insert: {
+          build_id: string
+          created_at?: string
+          id?: string
+          title: string
+        }
+        Update: {
+          build_id?: string
+          created_at?: string
+          id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mod_lists_build_id_fkey"
+            columns: ["build_id"]
+            isOneToOne: false
+            referencedRelation: "builds"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mod_list_items: {
+        Row: {
+          category: string | null
+          cost: number | null
+          created_at: string
+          id: string
+          list_id: string
+          manufacturer: string | null
+          part_name: string
+          part_number: string | null
+          status: string | null
+        }
+        Insert: {
+          category?: string | null
+          cost?: number | null
+          created_at?: string
+          id?: string
+          list_id: string
+          manufacturer?: string | null
+          part_name: string
+          part_number?: string | null
+          status?: string | null
+        }
+        Update: {
+          category?: string | null
+          cost?: number | null
+          created_at?: string
+          id?: string
+          list_id?: string
+          manufacturer?: string | null
+          part_name?: string
+          part_number?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mod_list_items_list_id_fkey"
+            columns: ["list_id"]
+            isOneToOne: false
+            referencedRelation: "mod_lists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vehicle_makes: {
+        Row: {
+          id: string
+          name: string
+        }
+        Insert: {
+          id?: string
+          name: string
+        }
+        Update: {
+          id?: string
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shops_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vehicle_models: {
+        Row: {
+          id: string
+          make_id: string
+          name: string
+        }
+        Insert: {
+          id?: string
+          make_id: string
+          name: string
+        }
+        Update: {
+          id?: string
+          make_id?: string
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vehicle_models_make_id_fkey"
+            columns: ["make_id"]
+            isOneToOne: false
+            referencedRelation: "vehicle_makes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vehicle_trims: {
+        Row: {
+          base_msrp: number | null
+          drivetrain: string | null
+          engine: string | null
+          id: string
+          model_id: string
+          transmission: string | null
+          trim_name: string | null
+          year: number | null
+        }
+        Insert: {
+          base_msrp?: number | null
+          drivetrain?: string | null
+          engine?: string | null
+          id?: string
+          model_id: string
+          transmission?: string | null
+          trim_name?: string | null
+          year?: number | null
+        }
+        Update: {
+          base_msrp?: number | null
+          drivetrain?: string | null
+          engine?: string | null
+          id?: string
+          model_id?: string
+          transmission?: string | null
+          trim_name?: string | null
+          year?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vehicle_trims_model_id_fkey"
+            columns: ["model_id"]
+            isOneToOne: false
+            referencedRelation: "vehicle_models"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      media_assets: {
+        Row: {
+          bucket_id: string
+          created_at: string
+          id: string
+          metadata: Json | null
+          owner_id: string | null
+          owner_type: Database["public"]["Enums"]["media_owner_type"]
+          path: string
+        }
+        Insert: {
+          bucket_id: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          owner_id?: string | null
+          owner_type: Database["public"]["Enums"]["media_owner_type"]
+          path: string
+        }
+        Update: {
+          bucket_id?: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          owner_id?: string | null
+          owner_type?: Database["public"]["Enums"]["media_owner_type"]
+          path?: string
+        }
+        Relationships: []
+      }
+      message_threads: {
+        Row: {
+          build_id: string | null
+          created_at: string
+          customer_id: string | null
+          id: string
+          last_message_at: string | null
+          shop_id: string | null
+        }
+        Insert: {
+          build_id?: string | null
+          created_at?: string
+          customer_id?: string | null
+          id?: string
+          last_message_at?: string | null
+          shop_id?: string | null
+        }
+        Update: {
+          build_id?: string | null
+          created_at?: string
+          customer_id?: string | null
+          id?: string
+          last_message_at?: string | null
+          shop_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_threads_build_id_fkey"
+            columns: ["build_id"]
+            isOneToOne: false
+            referencedRelation: "builds"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "message_threads_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "message_threads_shop_id_fkey"
+            columns: ["shop_id"]
+            isOneToOne: false
+            referencedRelation: "shops"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      thread_participants: {
+        Row: {
+          joined_at: string
+          role: Database["public"]["Enums"]["message_participant_role"]
+          thread_id: string
+          user_id: string
+        }
+        Insert: {
+          joined_at?: string
+          role?: Database["public"]["Enums"]["message_participant_role"]
+          thread_id: string
+          user_id: string
+        }
+        Update: {
+          joined_at?: string
+          role?: Database["public"]["Enums"]["message_participant_role"]
+          thread_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "thread_participants_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "message_threads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "thread_participants_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          body: string | null
+          created_at: string
+          id: string
+          media_asset_id: string | null
+          read_at: string | null
+          sender_id: string
+          thread_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          media_asset_id?: string | null
+          read_at?: string | null
+          sender_id: string
+          thread_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          media_asset_id?: string | null
+          read_at?: string | null
+          sender_id?: string
+          thread_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "message_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          actor_id: string | null
+          build_id: string | null
+          created_at: string
+          id: string
+          message_id: string | null
+          payload: Json | null
+          quote_id: string | null
+          read_at: string | null
+          type: Database["public"]["Enums"]["notification_type"]
+          user_id: string
+        }
+        Insert: {
+          actor_id?: string | null
+          build_id?: string | null
+          created_at?: string
+          id?: string
+          message_id?: string | null
+          payload?: Json | null
+          quote_id?: string | null
+          read_at?: string | null
+          type: Database["public"]["Enums"]["notification_type"]
+          user_id: string
+        }
+        Update: {
+          actor_id?: string | null
+          build_id?: string | null
+          created_at?: string
+          id?: string
+          message_id?: string | null
+          payload?: Json | null
+          quote_id?: string | null
+          read_at?: string | null
+          type?: Database["public"]["Enums"]["notification_type"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_build_id_fkey"
+            columns: ["build_id"]
+            isOneToOne: false
+            referencedRelation: "builds"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shop_verification_requests: {
+        Row: {
+          id: string
+          notes: string | null
+          reviewer_id: string | null
+          shop_id: string
+          status: string
+          submitted_at: string
+          submitted_by: string
+          reviewed_at: string | null
+        }
+        Insert: {
+          id?: string
+          notes?: string | null
+          reviewer_id?: string | null
+          shop_id: string
+          status?: string
+          submitted_at?: string
+          submitted_by: string
+          reviewed_at?: string | null
+        }
+        Update: {
+          id?: string
+          notes?: string | null
+          reviewer_id?: string | null
+          shop_id?: string
+          status?: string
+          submitted_at?: string
+          submitted_by?: string
+          reviewed_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shop_verification_requests_shop_id_fkey"
+            columns: ["shop_id"]
+            isOneToOne: false
+            referencedRelation: "shops"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shop_verification_requests_submitted_by_fkey"
+            columns: ["submitted_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shop_verification_requests_reviewer_id_fkey"
+            columns: ["reviewer_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stripe_accounts: {
+        Row: {
+          account_id: string
+          created_at: string
+          id: string
+          onboarding_complete: boolean
+          shop_id: string
+        }
+        Insert: {
+          account_id: string
+          created_at?: string
+          id?: string
+          onboarding_complete?: boolean
+          shop_id: string
+        }
+        Update: {
+          account_id?: string
+          created_at?: string
+          id?: string
+          onboarding_complete?: boolean
+          shop_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stripe_accounts_shop_id_fkey"
+            columns: ["shop_id"]
+            isOneToOne: false
+            referencedRelation: "shops"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stripe_prices: {
+        Row: {
+          build_id: string | null
+          created_at: string
+          currency: string
+          id: string
+          price_id: string
+          unit_amount: number
+        }
+        Insert: {
+          build_id?: string | null
+          created_at?: string
+          currency?: string
+          id?: string
+          price_id: string
+          unit_amount: number
+        }
+        Update: {
+          build_id?: string | null
+          created_at?: string
+          currency?: string
+          id?: string
+          price_id?: string
+          unit_amount?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stripe_prices_build_id_fkey"
+            columns: ["build_id"]
+            isOneToOne: false
+            referencedRelation: "builds"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payment_transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          id: string
+          payer_id: string | null
+          quote_id: string | null
+          status: string
+          stripe_payment_intent: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string
+          id?: string
+          payer_id?: string | null
+          quote_id?: string | null
+          status: string
+          stripe_payment_intent?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          payer_id?: string | null
+          quote_id?: string | null
+          status?: string
+          stripe_payment_intent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_transactions_payer_id_fkey"
+            columns: ["payer_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_transactions_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stripe_webhook_events: {
+        Row: {
+          created_at: string
+          event_id: string
+          id: string
+          payload: Json
+          processed_at: string | null
+          type: string
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          id?: string
+          payload: Json
+          processed_at?: string | null
+          type: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          id?: string
+          payload?: Json
+          processed_at?: string | null
+          type?: string
+        }
+        Relationships: []
       }
       events: {
         Row: {
@@ -188,8 +903,12 @@ export type Database = {
           created_at: string
           details: string | null
           id: string
+          estimated_total: number | null
+          expires_at: string | null
           requester_id: string
-          status: string
+          shop_id: string | null
+          status: Database["public"]["Enums"]["quote_status"]
+          thread_id: string | null
         }
         Insert: {
           build_id: string
@@ -197,7 +916,11 @@ export type Database = {
           details?: string | null
           id?: string
           requester_id: string
-          status?: string
+          estimated_total?: number | null
+          expires_at?: string | null
+          shop_id?: string | null
+          status?: Database["public"]["Enums"]["quote_status"]
+          thread_id?: string | null
         }
         Update: {
           build_id?: string
@@ -205,7 +928,11 @@ export type Database = {
           details?: string | null
           id?: string
           requester_id?: string
-          status?: string
+          estimated_total?: number | null
+          expires_at?: string | null
+          shop_id?: string | null
+          status?: Database["public"]["Enums"]["quote_status"]
+          thread_id?: string | null
         }
         Relationships: [
           {
@@ -213,6 +940,27 @@ export type Database = {
             columns: ["build_id"]
             isOneToOne: false
             referencedRelation: "builds"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotes_requester_id_fkey"
+            columns: ["requester_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotes_shop_id_fkey"
+            columns: ["shop_id"]
+            isOneToOne: false
+            referencedRelation: "shops"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotes_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "message_threads"
             referencedColumns: ["id"]
           },
         ]
@@ -271,7 +1019,15 @@ export type Database = {
           state?: string | null
           verified?: boolean
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "shops_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       users: {
         Row: {
@@ -300,6 +1056,17 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "user" | "seller" | "verified_shop"
+      media_owner_type: "build" | "build_update" | "profile" | "shop"
+      message_participant_role: "customer" | "shop" | "admin"
+      notification_type:
+        | "like"
+        | "comment"
+        | "save"
+        | "message"
+        | "quote_update"
+        | "build_update"
+        | "system"
+      quote_status: "pending" | "in_progress" | "accepted" | "declined" | "completed"
     }
     CompositeTypes: {
       [_ in never]: never

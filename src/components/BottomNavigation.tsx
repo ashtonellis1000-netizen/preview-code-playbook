@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { Home, Calendar, Users, User } from "lucide-react";
+import { Home, Calendar, Users, User, MessageCircle, Store } from "lucide-react";
 
 export const BottomNavigation = () => {
   const navigate = useNavigate();
@@ -7,8 +7,9 @@ export const BottomNavigation = () => {
 
   const navItems = [
     { label: "Feed", path: "/feed", icon: Home },
+    { label: "Shops", path: "/shops", icon: Store },
     { label: "Events", path: "/events", icon: Calendar },
-    { label: "Clubs", path: "/clubs", icon: Users },
+    { label: "Messages", path: "/messages", icon: MessageCircle },
     { label: "Profile", path: "/profile", icon: User },
   ];
 
